@@ -15,7 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.generic import TemplateView
 from .views import *
 
 urlpatterns = [
@@ -33,4 +34,10 @@ urlpatterns = [
     path("create-event/", create_event),
     path("update-event/<int:id>/", update_event),
     path("delete-event/<int:id>/", delete_event),
+]
+
+# Serve React app's index.html for all other routes (client-side routing)
+urlpatterns += [
+    path('', TemplateView.as_view(template_name='index.html')),
+    re_path(r'^(?:.*)/?$', TemplateView.as_view(template_name='index.html')),
 ]
